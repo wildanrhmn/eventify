@@ -1,5 +1,11 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsNotEmpty, IsOptional, IsEmail, IsPhoneNumber, IsUUID } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsEmail,
+  IsPhoneNumber,
+  IsUUID,
+} from 'class-validator';
 import { RsvpStatus } from '../entities/guest.entity';
 
 @InputType()

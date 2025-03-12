@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Guest } from './guest.entity';
 import { Task } from './task.entity';
@@ -9,7 +17,7 @@ export enum EventStatus {
   CONFIRMED = 'confirmed',
   IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 @Entity('events')
@@ -35,26 +43,26 @@ export class Event {
   @Column({
     type: 'enum',
     enum: EventStatus,
-    default: EventStatus.PLANNING
+    default: EventStatus.PLANNING,
   })
   status: EventStatus;
 
   @Column({ nullable: true })
   coverImageUrl: string;
 
-  @ManyToOne(() => User, user => user.events)
+  @ManyToOne(() => User, (user) => user.events)
   organizer: User;
 
   @Column()
   organizerId: string;
 
-  @OneToMany(() => Guest, guest => guest.event)
+  @OneToMany(() => Guest, (guest) => guest.event)
   guests: Guest[];
 
-  @OneToMany(() => Task, task => task.event)
+  @OneToMany(() => Task, (task) => task.event)
   tasks: Task[];
 
-  @OneToMany(() => Budget, budget => budget.event)
+  @OneToMany(() => Budget, (budget) => budget.event)
   budgetItems: Budget[];
 
   @CreateDateColumn()

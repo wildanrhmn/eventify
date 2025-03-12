@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Event } from './event.entity';
 
@@ -6,7 +13,7 @@ export enum RsvpStatus {
   PENDING = 'pending',
   CONFIRMED = 'confirmed',
   DECLINED = 'declined',
-  MAYBE = 'maybe'
+  MAYBE = 'maybe',
 }
 
 @Entity('guests')
@@ -26,7 +33,7 @@ export class Guest {
   @Column({
     type: 'enum',
     enum: RsvpStatus,
-    default: RsvpStatus.PENDING
+    default: RsvpStatus.PENDING,
   })
   rsvpStatus: RsvpStatus;
 
@@ -39,13 +46,13 @@ export class Guest {
   @Column({ type: 'jsonb', nullable: true })
   additionalInfo: Record<string, any>;
 
-  @ManyToOne(() => Event, event => event.guests)
+  @ManyToOne(() => Event, (event) => event.guests)
   event: Event;
 
   @Column()
   eventId: string;
 
-  @ManyToOne(() => User, user => user.guestProfiles, { nullable: true })
+  @ManyToOne(() => User, (user) => user.guestProfiles, { nullable: true })
   user: User;
 
   @Column({ nullable: true })

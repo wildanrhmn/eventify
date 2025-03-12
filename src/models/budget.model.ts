@@ -1,4 +1,10 @@
-import { ObjectType, Field, ID, Float, registerEnumType } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  ID,
+  Float,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { EventType } from './event.model';
 import { BudgetItemType, BudgetItemStatus } from '../entities/budget.entity';
 

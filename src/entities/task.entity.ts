@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Event } from './event.entity';
 
@@ -6,14 +13,14 @@ export enum TaskPriority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical'
+  CRITICAL = 'critical',
 }
 
 export enum TaskStatus {
   TO_DO = 'to_do',
   IN_PROGRESS = 'in_progress',
   DONE = 'done',
-  BLOCKED = 'blocked'
+  BLOCKED = 'blocked',
 }
 
 @Entity('tasks')
@@ -30,27 +37,27 @@ export class Task {
   @Column({
     type: 'enum',
     enum: TaskStatus,
-    default: TaskStatus.TO_DO
+    default: TaskStatus.TO_DO,
   })
   status: TaskStatus;
 
   @Column({
     type: 'enum',
     enum: TaskPriority,
-    default: TaskPriority.MEDIUM
+    default: TaskPriority.MEDIUM,
   })
   priority: TaskPriority;
 
   @Column({ type: 'timestamp', nullable: true })
   dueDate: Date;
 
-  @ManyToOne(() => Event, event => event.tasks)
+  @ManyToOne(() => Event, (event) => event.tasks)
   event: Event;
 
   @Column()
   eventId: string;
 
-  @ManyToOne(() => User, user => user.assignedTasks, { nullable: true })
+  @ManyToOne(() => User, (user) => user.assignedTasks, { nullable: true })
   assignedTo: User;
 
   @Column({ nullable: true })

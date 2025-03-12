@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Event } from './event.entity';
 
 export enum BudgetItemType {
@@ -9,7 +16,7 @@ export enum BudgetItemType {
   PHOTOGRAPHY = 'photography',
   TRANSPORTATION = 'transportation',
   ACCOMMODATION = 'accommodation',
-  OTHER = 'other'
+  OTHER = 'other',
 }
 
 export enum BudgetItemStatus {
@@ -17,7 +24,7 @@ export enum BudgetItemStatus {
   QUOTED = 'quoted',
   BOOKED = 'booked',
   PAID = 'paid',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 @Entity('budget_items')
@@ -34,7 +41,7 @@ export class Budget {
   @Column({
     type: 'enum',
     enum: BudgetItemType,
-    default: BudgetItemType.OTHER
+    default: BudgetItemType.OTHER,
   })
   type: BudgetItemType;
 
@@ -47,7 +54,7 @@ export class Budget {
   @Column({
     type: 'enum',
     enum: BudgetItemStatus,
-    default: BudgetItemStatus.PLANNED
+    default: BudgetItemStatus.PLANNED,
   })
   status: BudgetItemStatus;
 
@@ -57,7 +64,7 @@ export class Budget {
   @Column({ nullable: true })
   vendorContact: string;
 
-  @ManyToOne(() => Event, event => event.budgetItems)
+  @ManyToOne(() => Event, (event) => event.budgetItems)
   event: Event;
 
   @Column()

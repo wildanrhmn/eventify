@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Event } from './event.entity';
 import { Task } from './task.entity';
 import { Guest } from './guest.entity';
@@ -20,13 +27,13 @@ export class User {
   @Column({ nullable: true })
   avatarUrl: string;
 
-  @OneToMany(() => Event, event => event.organizer)
+  @OneToMany(() => Event, (event) => event.organizer)
   events: Event[];
 
-  @OneToMany(() => Task, task => task.assignedTo)
+  @OneToMany(() => Task, (task) => task.assignedTo)
   assignedTasks: Task[];
 
-  @OneToMany(() => Guest, guest => guest.user)
+  @OneToMany(() => Guest, (guest) => guest.user)
   guestProfiles: Guest[];
 
   @CreateDateColumn()

@@ -1,8 +1,8 @@
 {
-  "name": "nest-typescript-starter",
+  "name": "eventify",
   "private": true,
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
+  "description": "Eventify is a event planning platform where users can create events, manage guest lists, track RSVPs, assign tasks, and coordinate all aspects of event planning in one place.",
   "license": "MIT",
   "scripts": {
     "build": "nest build",
@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/jest/bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prepare": "husky"
   },
   "engines": {
     "npm": ">=10.0.0",

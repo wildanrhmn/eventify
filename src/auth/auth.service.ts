@@ -6,6 +6,7 @@ import { User } from '../entities/user.entity';
 import { LoginInput } from './inputs/auth.input';
 import { AuthResponse } from './models/auth.model';
 import { UserType } from '../models/user.model';
+import { mapToGraphQLType } from '../utils/type-mappers';
 
 @Injectable()
 export class AuthService {
@@ -32,24 +33,12 @@ export class AuthService {
 
   async login(loginInput: LoginInput): Promise<AuthResponse> {
     const user = await this.validateUser(loginInput.email, loginInput.password);
-
+    
     const payload = { email: user.email, sub: user.id };
-
-    const userType: UserType = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      avatarUrl: user.avatarUrl,
-      events: [],
-      assignedTasks: [],
-      guestProfiles: [],
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
-
+    
     return {
       accessToken: this.jwtService.sign(payload),
-      user: userType,
+      user: mapToGraphQLType<UserType>(user),
     };
   }
 }

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 
@@ -19,12 +20,14 @@ import { Event } from './entities/event.entity';
 import { Guest } from './entities/guest.entity';
 import { Task } from './entities/task.entity';
 import { Budget } from './entities/budget.entity';
+import appConfig from './app.config';
 
 @Module({
   imports: [
     // Configuration
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [appConfig],
     }),
 
     // Database connection
@@ -33,14 +36,14 @@ import { Budget } from './entities/budget.entity';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('DB_HOST', 'localhost'),
-        port: configService.get<number>('DB_PORT', 5432),
-        username: configService.get<string>('DB_USERNAME', 'postgres'),
-        password: configService.get<string>('DB_PASSWORD', 'postgres'),
-        database: configService.get<string>('DB_DATABASE', 'event_planner'),
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.username'),
+        password: configService.get<string>('database.password'), 
+        database: configService.get<string>('database.database'),
         entities: [User, Event, Guest, Task, Budget],
-        synchronize: configService.get<boolean>('DB_SYNCHRONIZE', false),
-        logging: configService.get<boolean>('DB_LOGGING', false),
+        synchronize: configService.get<boolean>('database.synchronize'),
+        logging: configService.get<boolean>('database.logging'),
       }),
     }),
 
@@ -49,7 +52,8 @@ import { Budget } from './entities/budget.entity';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      playground: process.env.NODE_ENV !== 'production',
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
       context: ({ req }) => ({ req }),
     }),
 

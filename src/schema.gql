@@ -1,0 +1,290 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthResponse {
+  accessToken: String!
+  user: User!
+}
+
+type BudgetItem {
+  actualCost: Float
+  createdAt: DateTime!
+  description: String
+  estimatedCost: Float!
+  event: Event!
+  eventId: String!
+  id: ID!
+  name: String!
+  status: BudgetItemStatus!
+  type: BudgetItemType!
+  updatedAt: DateTime!
+  vendorContact: String
+  vendorName: String
+}
+
+"""The status of a budget item"""
+enum BudgetItemStatus {
+  BOOKED
+  CANCELLED
+  PAID
+  PLANNED
+  QUOTED
+}
+
+"""The type of budget item"""
+enum BudgetItemType {
+  ACCOMMODATION
+  CATERING
+  DECORATION
+  ENTERTAINMENT
+  OTHER
+  PHOTOGRAPHY
+  TRANSPORTATION
+  VENUE
+}
+
+input CreateBudgetItemInput {
+  actualCost: Float
+  description: String
+  estimatedCost: Float!
+  eventId: String!
+  name: String!
+  status: BudgetItemStatus
+  type: BudgetItemType
+  vendorContact: String
+  vendorName: String
+}
+
+input CreateEventInput {
+  coverImageUrl: String
+  description: String
+  endDate: String!
+  location: String
+  startDate: String!
+  status: EventStatus
+  title: String!
+}
+
+input CreateGuestInput {
+  additionalInfo: String
+  dietaryRestrictions: String
+  email: String
+  eventId: String!
+  name: String!
+  numberOfGuests: Float = 1
+  phone: String
+  rsvpStatus: RsvpStatus
+  userId: String
+}
+
+input CreateTaskInput {
+  assignedToId: String
+  description: String
+  dueDate: String
+  eventId: String!
+  priority: TaskPriority
+  status: TaskStatus
+  title: String!
+}
+
+input CreateUserInput {
+  avatarUrl: String
+  email: String!
+  name: String!
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Event {
+  budgetItems: [BudgetItem!]
+  completedTasksCount: Float
+  confirmedGuestCount: Float
+  coverImageUrl: String
+  createdAt: DateTime!
+  description: String
+  endDate: DateTime!
+  guestCount: Float
+  guests: [Guest!]
+  id: ID!
+  location: String
+  organizer: User!
+  organizerId: String!
+  startDate: DateTime!
+  status: EventStatus!
+  tasks: [Task!]
+  title: String!
+  totalBudget: Float
+  totalSpent: Float
+  totalTasksCount: Float
+  updatedAt: DateTime!
+}
+
+"""The status of the event"""
+enum EventStatus {
+  CANCELLED
+  COMPLETED
+  CONFIRMED
+  IN_PROGRESS
+  PLANNING
+}
+
+type Guest {
+  additionalInfo: String
+  createdAt: DateTime!
+  dietaryRestrictions: String
+  email: String
+  event: Event!
+  eventId: String!
+  id: ID!
+  name: String
+  numberOfGuests: Float!
+  phone: String
+  rsvpStatus: RsvpStatus!
+  updatedAt: DateTime!
+  user: User
+  userId: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createBudgetItem(createBudgetItemInput: CreateBudgetItemInput!): BudgetItem!
+  createEvent(createEventInput: CreateEventInput!): Event!
+  createGuest(createGuestInput: CreateGuestInput!): Guest!
+  createTask(createTaskInput: CreateTaskInput!): Task!
+  createUser(createUserInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): AuthResponse!
+  removeBudgetItem(id: ID!): Boolean!
+  removeEvent(id: ID!): Boolean!
+  removeGuest(id: ID!): Boolean!
+  removeTask(id: ID!): Boolean!
+  removeUser: Boolean!
+  updateBudgetItem(id: ID!, updateBudgetItemInput: UpdateBudgetItemInput!): BudgetItem!
+  updateEvent(id: ID!, updateEventInput: UpdateEventInput!): Event!
+  updateGuest(id: ID!, updateGuestInput: UpdateGuestInput!): Guest!
+  updateTask(id: ID!, updateTaskInput: UpdateTaskInput!): Task!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  budgetItem(id: ID!): BudgetItem!
+  budgetItems: [BudgetItem!]!
+  event(id: ID!): Event!
+  eventBudgetItems(eventId: ID!): [BudgetItem!]!
+  eventGuests(eventId: ID!): [Guest!]!
+  eventTasks(eventId: ID!): [Task!]!
+  events: [Event!]!
+  guest(id: ID!): Guest!
+  guests: [Guest!]!
+  me: User!
+  myEvents: [Event!]!
+  task(id: ID!): Task!
+  tasks: [Task!]!
+  user(id: ID!): User!
+  users: [User!]!
+}
+
+"""The RSVP status of a guest"""
+enum RsvpStatus {
+  CONFIRMED
+  DECLINED
+  MAYBE
+  PENDING
+}
+
+type Task {
+  assignedTo: User
+  assignedToId: String
+  createdAt: DateTime!
+  description: String
+  dueDate: DateTime
+  event: Event!
+  eventId: String!
+  id: ID!
+  priority: TaskPriority!
+  status: TaskStatus!
+  title: String!
+  updatedAt: DateTime!
+}
+
+"""The priority level of a task"""
+enum TaskPriority {
+  CRITICAL
+  HIGH
+  LOW
+  MEDIUM
+}
+
+"""The status of a task"""
+enum TaskStatus {
+  BLOCKED
+  DONE
+  IN_PROGRESS
+  TO_DO
+}
+
+input UpdateBudgetItemInput {
+  actualCost: Float
+  description: String
+  estimatedCost: Float
+  name: String
+  status: BudgetItemStatus
+  type: BudgetItemType
+  vendorContact: String
+  vendorName: String
+}
+
+input UpdateEventInput {
+  coverImageUrl: String
+  description: String
+  endDate: String
+  location: String
+  startDate: String
+  status: EventStatus
+  title: String
+}
+
+input UpdateGuestInput {
+  additionalInfo: String
+  dietaryRestrictions: String
+  email: String
+  name: String
+  numberOfGuests: Float
+  phone: String
+  rsvpStatus: RsvpStatus
+}
+
+input UpdateTaskInput {
+  assignedToId: String
+  description: String
+  dueDate: String
+  priority: TaskPriority
+  status: TaskStatus
+  title: String
+}
+
+input UpdateUserInput {
+  avatarUrl: String
+  email: String
+  name: String
+}
+
+type User {
+  assignedTasks: [Task!]
+  avatarUrl: String
+  createdAt: DateTime!
+  email: String!
+  events: [Event!]
+  guestProfiles: [Guest!]
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}

@@ -21,7 +21,10 @@ import { Guest } from './entities/guest.entity';
 import { Task } from './entities/task.entity';
 import { Budget } from './entities/budget.entity';
 import appConfig from './app.config';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
+// App module
 @Module({
   imports: [
     // Configuration
@@ -65,5 +68,7 @@ import appConfig from './app.config';
     BudgetModule,
     AuthModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

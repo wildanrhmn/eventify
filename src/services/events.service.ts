@@ -76,7 +76,9 @@ export class EventsService {
 
     Object.assign(event, updateEventInput);
 
-    return this.eventsRepository.save(event);
+    await this.eventsRepository.save(event);
+
+    return this.findOne(id);
   }
 
   async remove(id: string): Promise<boolean> {

@@ -73,6 +73,7 @@ export class EventsResolver {
     @Args('updateEventInput') updateEventInput: UpdateEventInput,
   ): Promise<EventType> {
     const event = await this.eventsService.update(id, updateEventInput);
+    console.log(event);
     return mapToGraphQLType<EventType>(event);
   }
 

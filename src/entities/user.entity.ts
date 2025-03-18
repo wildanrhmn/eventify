@@ -9,6 +9,7 @@ import {
 import { Event } from './event.entity';
 import { Task } from './task.entity';
 import { Guest } from './guest.entity';
+import { EventCollaborator } from './event-collaborator.entity';
 
 @Entity('users')
 export class User {
@@ -35,6 +36,9 @@ export class User {
 
   @OneToMany(() => Guest, (guest) => guest.user)
   guestProfiles: Guest[];
+
+  @OneToMany(() => EventCollaborator, (collaborator) => collaborator.user)
+  collaborations: EventCollaborator[];
 
   @CreateDateColumn()
   createdAt: Date;

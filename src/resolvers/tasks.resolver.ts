@@ -18,6 +18,8 @@ import { CreateTaskInput, UpdateTaskInput } from '../inputs/task.input';
 import { GqlAuthGuard } from '../auth/gql-auth.guard';
 import { Task } from '../entities/task.entity';
 import { mapToGraphQLType, mapArrayToGraphQLType } from '../utils/type-mappers';
+import { CurrentUser } from 'src/auth/current-user.decorator';
+import { User } from 'src/entities/user.entity';
 
 @Resolver(() => TaskType)
 export class TasksResolver {
@@ -40,6 +42,13 @@ export class TasksResolver {
     @Args('eventId', { type: () => ID }) eventId: string,
   ): Promise<TaskType[]> {
     const tasks = await this.tasksService.findByEvent(eventId);
+    return mapArrayToGraphQLType(tasks);
+  }
+
+  @Query(() => [TaskType])
+@UseGuards(GqlAuthGuard)
+  async myAssignedTasks(@CurrentUser() user: User): Promise<TaskType[]> {
+    const tasks = await this.tasksService.findByAssignee(user.id);
     return mapArrayToGraphQLType(tasks);
   }
 

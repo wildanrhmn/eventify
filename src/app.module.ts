@@ -12,6 +12,7 @@ import { EventsModule } from './modules/events.module';
 import { GuestsModule } from './modules/guests.module';
 import { TasksModule } from './modules/tasks.module';
 import { BudgetModule } from './modules/budget.module';
+import { CollaboratorsModule } from './modules/collaborators.module';
 import { AuthModule } from './auth/auth.module';
 
 // Import entities
@@ -20,6 +21,7 @@ import { Event } from './entities/event.entity';
 import { Guest } from './entities/guest.entity';
 import { Task } from './entities/task.entity';
 import { Budget } from './entities/budget.entity';
+import { EventCollaborator } from './entities/event-collaborator.entity';
 import appConfig from './app.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -44,7 +46,7 @@ import { AppService } from './app.service';
         username: configService.get<string>('database.username'),
         password: configService.get<string>('database.password'), 
         database: configService.get<string>('database.database'),
-        entities: [User, Event, Guest, Task, Budget],
+        entities: [User, Event, Guest, Task, Budget, EventCollaborator],
         synchronize: configService.get<boolean>('database.synchronize'),
         logging: configService.get<boolean>('database.logging'),
       }),
@@ -67,6 +69,7 @@ import { AppService } from './app.service';
     TasksModule,
     BudgetModule,
     AuthModule,
+    CollaboratorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

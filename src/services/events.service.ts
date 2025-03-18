@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from '../entities/event.entity';
@@ -6,9 +6,10 @@ import { User } from '../entities/user.entity';
 import { Guest } from '../entities/guest.entity';
 import { Task } from '../entities/task.entity';
 import { Budget } from '../entities/budget.entity';
-import { CreateEventInput, UpdateEventInput } from '../inputs/event.input';
 import { RsvpStatus } from '../entities/guest.entity';
 import { TaskStatus } from '../entities/task.entity';
+import { EventCollaborator } from '../entities/event-collaborator.entity';
+import { CreateEventInput, UpdateEventInput } from '../inputs/event.input';
 
 @Injectable()
 export class EventsService {
@@ -23,29 +24,37 @@ export class EventsService {
     private tasksRepository: Repository<Task>,
     @InjectRepository(Budget)
     private budgetRepository: Repository<Budget>,
+    @InjectRepository(EventCollaborator)
+    private collaboratorsRepository: Repository<EventCollaborator>,
   ) {}
 
   async findAll(): Promise<Event[]> {
     return this.eventsRepository.find({
-      relations: ['organizer', 'guests', 'tasks', 'budgetItems'],
+      relations: ['organizer', 'guests', 'tasks', 'budgetItems', 'collaborators'],
     });
   }
 
   async findByOrganizer(organizerId: string): Promise<Event[]> {
     return this.eventsRepository.find({
       where: { organizerId },
-      relations: ['organizer', 'guests', 'tasks', 'budgetItems'],
+      relations: ['organizer', 'guests', 'tasks', 'budgetItems', 'collaborators'],
     });
   }
 
-  async findOne(id: string): Promise<Event> {
+  async findOne(id: string, userId?: string): Promise<Event> {
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['organizer', 'guests', 'tasks', 'budgetItems'],
+      relations: ['organizer', 'guests', 'tasks', 'budgetItems', 'collaborators'],
     });
 
     if (!event) {
       throw new NotFoundException(`Event with ID ${id} not found`);
+    }
+
+    const hasAccess = await this.canUserAccessEvent(userId, id);
+
+    if (!hasAccess) {
+      throw new UnauthorizedException('You do not have access to this event');
     }
 
     return event;
@@ -134,5 +143,21 @@ export class EventsService {
       .getRawOne();
 
     return result.total || 0;
+  }
+
+  async canUserAccessEvent(userId: string, eventId: string): Promise<boolean> {
+    const event = await this.findOne(eventId);
+
+    if (event.organizerId === userId) return true;
+
+    const collaborator = await this.collaboratorsRepository.findOne({
+      where: {
+        eventId,
+        userId,
+        accepted: true,
+      },
+    });
+
+    return !!collaborator;
   }
 }

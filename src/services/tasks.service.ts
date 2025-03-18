@@ -30,6 +30,13 @@ export class TasksService {
     });
   }
 
+  async findByAssignee(userId: string): Promise<Task[]> {
+    return this.tasksRepository.find({
+      where: { assignedToId: userId },
+      relations: ['event', 'assignedTo'],
+    });
+  }
+
   async findOne(id: string): Promise<Task> {
     const task = await this.tasksRepository.findOne({
       where: { id },

@@ -11,6 +11,7 @@ import { User } from './user.entity';
 import { Guest } from './guest.entity';
 import { Task } from './task.entity';
 import { Budget } from './budget.entity';
+import { EventCollaborator } from './event-collaborator.entity';
 
 export enum EventStatus {
   PLANNING = 'planning',
@@ -64,6 +65,9 @@ export class Event {
 
   @OneToMany(() => Budget, (budget) => budget.event)
   budgetItems: Budget[];
+
+  @OneToMany(() => EventCollaborator, (collaborator) => collaborator.event)
+  collaborators: EventCollaborator[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddCollaboratorInput {
+  email: String!
+  eventId: String!
+  role: String!
+}
+
 type AuthResponse {
   accessToken: String!
   user: User!
@@ -42,6 +48,17 @@ enum BudgetItemType {
   PHOTOGRAPHY
   TRANSPORTATION
   VENUE
+}
+
+type Collaborator {
+  accepted: Boolean!
+  createdAt: DateTime!
+  event: Event!
+  eventId: String!
+  id: ID!
+  role: String!
+  user: User!
+  userId: String!
 }
 
 input CreateBudgetItemInput {
@@ -156,6 +173,8 @@ input LoginInput {
 }
 
 type Mutation {
+  acceptCollaboration(id: ID!): Collaborator!
+  addCollaborator(input: AddCollaboratorInput!): Collaborator!
   createBudgetItem(createBudgetItemInput: CreateBudgetItemInput!): BudgetItem!
   createEvent(createEventInput: CreateEventInput!): Event!
   createGuest(createGuestInput: CreateGuestInput!): Guest!
@@ -163,6 +182,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   login(loginInput: LoginInput!): AuthResponse!
   removeBudgetItem(id: ID!): Boolean!
+  removeCollaborator(id: ID!): Boolean!
   removeEvent(id: ID!): Boolean!
   removeGuest(id: ID!): Boolean!
   removeTask(id: ID!): Boolean!
@@ -179,13 +199,17 @@ type Query {
   budgetItems: [BudgetItem!]!
   event(id: ID!): Event!
   eventBudgetItems(eventId: ID!): [BudgetItem!]!
+  eventCollaborators(eventId: ID!): [Collaborator!]!
   eventGuests(eventId: ID!): [Guest!]!
   eventTasks(eventId: ID!): [Task!]!
   events: [Event!]!
   guest(id: ID!): Guest!
   guests: [Guest!]!
   me: User!
+  myAssignedTasks: [Task!]!
+  myCollaborations: [Collaborator!]!
   myEvents: [Event!]!
+  myPendingInvitations: [Collaborator!]!
   task(id: ID!): Task!
   tasks: [Task!]!
   user(id: ID!): User!

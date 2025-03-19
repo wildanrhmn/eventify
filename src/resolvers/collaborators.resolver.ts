@@ -77,6 +77,22 @@ export class CollaboratorsResolver {
     return mapToGraphQLType(updatedCollaborator);
   }
 
+  @Mutation(() => CollaboratorType)
+  @UseGuards(GqlAuthGuard)
+  async rejectCollaboration(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User
+  ): Promise<CollaboratorType> {
+    const collaborator = await this.collaboratorsService.findOne(id);
+    
+    if (!collaborator || collaborator.userId !== user.id) {
+      throw new UnauthorizedException('You do not have permission to reject this invitation');
+    }
+    
+    const updatedCollaborator = await this.collaboratorsService.updateCollaborator(id, { accepted: false });
+    return mapToGraphQLType(updatedCollaborator);
+  }
+
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
   async removeCollaborator(

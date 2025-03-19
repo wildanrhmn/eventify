@@ -46,17 +46,18 @@ export class EventsService {
       where: { id },
       relations: ['organizer', 'guests', 'tasks', 'budgetItems', 'collaborators'],
     });
-
+    
     if (!event) {
       throw new NotFoundException(`Event with ID ${id} not found`);
     }
-
-    const hasAccess = await this.canUserAccessEvent(userId, id);
-
-    if (!hasAccess) {
-      throw new UnauthorizedException('You do not have access to this event');
+    
+    if (userId && event.organizerId !== userId) {
+      const hasAccess = await this.canUserAccessEvent(userId, id);
+      if (!hasAccess) {
+        throw new UnauthorizedException('You do not have access to this event');
+      }
     }
-
+    
     return event;
   }
 
@@ -147,17 +148,17 @@ export class EventsService {
 
   async canUserAccessEvent(userId: string, eventId: string): Promise<boolean> {
     const event = await this.findOne(eventId);
-
+    
     if (event.organizerId === userId) return true;
-
+    
     const collaborator = await this.collaboratorsRepository.findOne({
-      where: {
+      where: { 
         eventId,
         userId,
-        accepted: true,
+        accepted: true
       },
     });
-
+    
     return !!collaborator;
   }
 }

@@ -181,6 +181,7 @@ type Mutation {
   createTask(createTaskInput: CreateTaskInput!): Task!
   createUser(createUserInput: CreateUserInput!): User!
   login(loginInput: LoginInput!): AuthResponse!
+  rejectCollaboration(id: ID!): Collaborator!
   removeBudgetItem(id: ID!): Boolean!
   removeCollaborator(id: ID!): Boolean!
   removeEvent(id: ID!): Boolean!

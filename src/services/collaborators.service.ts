@@ -36,14 +36,14 @@ export class CollaboratorsService {
   async findByUser(userId: string): Promise<EventCollaborator[]> {
     return this.collaboratorsRepository.find({
       where: { userId, accepted: true },
-      relations: ['event'],
+      relations: ['event', 'user'],
     });
   }
 
   async findPendingInvitations(userId: string): Promise<EventCollaborator[]> {
     return this.collaboratorsRepository.find({
       where: { userId, accepted: false },
-      relations: ['event'],
+      relations: ['event', 'user'],
     });
   }
 

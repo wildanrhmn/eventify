@@ -51,8 +51,11 @@ export class EventsResolver {
 
   @Query(() => EventType)
   @UseGuards(GqlAuthGuard)
-  async event(@Args('id', { type: () => ID }) id: string): Promise<EventType> {
-    const event = await this.eventsService.findOne(id);
+  async event(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User,
+  ): Promise<EventType> {
+    const event = await this.eventsService.findOne(id, user.id);
     return mapToGraphQLType<EventType>(event);
   }
 
@@ -73,7 +76,6 @@ export class EventsResolver {
     @Args('updateEventInput') updateEventInput: UpdateEventInput,
   ): Promise<EventType> {
     const event = await this.eventsService.update(id, updateEventInput);
-    console.log(event);
     return mapToGraphQLType<EventType>(event);
   }
 

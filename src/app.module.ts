@@ -49,6 +49,12 @@ import { AppService } from './app.service';
         entities: [User, Event, Guest, Task, Budget, EventCollaborator],
         synchronize: configService.get<boolean>('database.synchronize'),
         logging: configService.get<boolean>('database.logging'),
+        ssl: configService.get<boolean>('database.ssl'),
+        extra: {
+          ssl: {
+            rejectUnauthorized: false
+          }
+        },
       }),
     }),
 

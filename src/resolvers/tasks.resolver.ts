@@ -18,8 +18,8 @@ import { CreateTaskInput, UpdateTaskInput } from '../inputs/task.input';
 import { GqlAuthGuard } from '../auth/gql-auth.guard';
 import { Task } from '../entities/task.entity';
 import { mapToGraphQLType, mapArrayToGraphQLType } from '../utils/type-mappers';
-import { CurrentUser } from 'src/auth/current-user.decorator';
-import { User } from 'src/entities/user.entity';
+import { CurrentUser } from '../auth/current-user.decorator';
+import { User } from '../entities/user.entity';
 
 @Resolver(() => TaskType)
 export class TasksResolver {

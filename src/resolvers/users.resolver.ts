@@ -11,7 +11,7 @@ import { UseGuards } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { TasksService } from '../services/tasks.service';
 import { GuestsService } from '../services/guests.service';
-import { EventsService } from 'src/services/events.service';
+import { EventsService } from '../services/events.service';
 import { UserType } from '../models/user.model';
 import { EventType } from '../models/event.model';
 import { TaskType } from '../models/task.model';

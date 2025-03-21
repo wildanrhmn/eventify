@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EventCollaborator } from 'src/entities/event-collaborator.entity';
+import { EventCollaborator } from '../entities/event-collaborator.entity';
 import { Repository } from 'typeorm';
-import { Event } from 'src/entities/event.entity';
-import { User } from 'src/entities/user.entity';
+import { Event } from '../entities/event.entity';
+import { User } from '../entities/user.entity';
 import {
   NotFoundException,
   UnauthorizedException,
   ConflictException,
 } from '@nestjs/common';
-import { CollaboratorRole } from 'src/entities/event-collaborator.entity';
+import { CollaboratorRole } from '../entities/event-collaborator.entity';
 import {
   AddCollaboratorInput,
   UpdateCollaboratorInput,
-} from 'src/inputs/collaborator.input';
+} from '../inputs/collaborator.input';
 
 @Injectable()
 export class CollaboratorsService {

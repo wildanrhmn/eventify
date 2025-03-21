@@ -1,17 +1,17 @@
 import { UnauthorizedException, UseGuards } from "@nestjs/common";
 import { ID } from "@nestjs/graphql";
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
-import { GqlAuthGuard } from "src/auth/gql-auth.guard";
-import { CollaboratorType } from "src/models/collaborator.model";
-import { CollaboratorsService } from "src/services/collaborators.service";
-import { EventsService } from "src/services/events.service";
-import { CurrentUser } from "src/auth/current-user.decorator";
-import { UsersService } from "src/services/users.service";
-import { User } from "src/entities/user.entity";
-import { EventCollaborator } from "src/entities/event-collaborator.entity";
-import { AddCollaboratorInput } from "src/inputs/collaborator.input";
-import { EventType } from "src/models/event.model";
-import { UserType } from "src/models/user.model";
+import { GqlAuthGuard } from "../auth/gql-auth.guard";
+import { CollaboratorType } from "../models/collaborator.model";
+import { CollaboratorsService } from "../services/collaborators.service";
+import { EventsService } from "../services/events.service";
+import { CurrentUser } from "../auth/current-user.decorator";
+import { UsersService } from "../services/users.service";
+import { User } from "../entities/user.entity";
+import { EventCollaborator } from "../entities/event-collaborator.entity";
+import { AddCollaboratorInput } from "../inputs/collaborator.input";
+import { EventType } from "../models/event.model";
+import { UserType } from "../models/user.model";
 import { mapToGraphQLType, mapArrayToGraphQLType } from '../utils/type-mappers';
 
 @Resolver(() => CollaboratorType)

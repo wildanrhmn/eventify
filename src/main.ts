@@ -3,9 +3,16 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import * as express from 'express';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+const server = express();
+
+async function createNestApp(expressInstance) {
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressInstance),
+  );
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
 
@@ -28,11 +35,52 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  const port = configService.get<number>('PORT') || 4000;
-  await app.listen(port);
-
-  logger.log(`Application is running on: http://localhost:${port}/api`);
-  logger.log(`GraphQL Playground: http://localhost:${port}/graphql`);
+  return app.init();
 }
 
-bootstrap();
+// For Vercel - keep a cached instance
+let cachedServer;
+
+export default async function handler(req, res) {
+  if (!cachedServer) {
+    await createNestApp(server);
+    cachedServer = server;
+  }
+  return cachedServer(req, res);
+}
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  async function bootstrap() {
+    const app = await NestFactory.create(AppModule);
+    const configService = app.get(ConfigService);
+    const logger = new Logger('Bootstrap');
+
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        forbidNonWhitelisted: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+      }),
+    );
+
+    app.enableCors({
+      origin:
+        configService.get<string>('FRONTEND_URL') || 'http://localhost:3000',
+      credentials: true,
+    });
+
+    app.setGlobalPrefix('api');
+
+    const port = configService.get<number>('PORT') || 4000;
+    await app.listen(port);
+
+    logger.log(`Application is running on: http://localhost:${port}/api`);
+    logger.log(`GraphQL Playground: http://localhost:${port}/graphql`);
+  }
+
+  bootstrap();
+}

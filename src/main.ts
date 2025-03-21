@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
+import express from 'express';
 
 const server = express();
 
@@ -14,7 +14,6 @@ async function createNestApp(expressInstance) {
     new ExpressAdapter(expressInstance),
   );
   const configService = app.get(ConfigService);
-  const logger = new Logger('Bootstrap');
 
   app.useGlobalPipes(
     new ValidationPipe({

@@ -66,6 +66,8 @@ import { AppService } from './app.service';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       context: ({ req }) => ({ req }),
+      introspection: true,
+      cache: 'bounded',
     }),
 
     // Feature modules
